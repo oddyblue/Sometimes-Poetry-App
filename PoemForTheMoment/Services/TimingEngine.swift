@@ -217,12 +217,18 @@ actor TimingEngine {
         let context = DeliveryContext(weather: weather)
 
         guard let poem = await poemStore.selectPoem(for: context) else {
+            logger.warning("No poem available for test delivery")
             return
         }
 
         await notificationManager.deliverPoemNow(poem, hint: context.hint)
         await poemStore.markAsDelivered(poem, context: context)
-        await scheduleNextPoem()
+
+        // Schedule next poem after a delay to avoid canceling the test notification
+        Task {
+            try? await Task.sleep(nanoseconds: 3_000_000_000) // 3 seconds
+            await self.scheduleNextPoem()
+        }
     }
 }
 
