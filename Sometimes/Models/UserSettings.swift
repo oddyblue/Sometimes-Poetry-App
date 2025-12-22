@@ -5,8 +5,8 @@ import Foundation
 
 struct UserSettings: Codable {
     // Delivery preferences
-    var activeHoursStart: Int = 7   // 7 AM
-    var activeHoursEnd: Int = 22    // 10 PM
+    var activeHoursStart: Int = 8   // 8 AM default
+    var activeHoursEnd: Int = 12    // 12 PM default (morning window)
     var poemsPerWeek: Int = 3       // 1-7 (daily)
     
     // App state

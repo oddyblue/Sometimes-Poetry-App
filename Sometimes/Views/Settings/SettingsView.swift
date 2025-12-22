@@ -2,12 +2,15 @@
 // Refined settings with improved frequency options and UX
 
 import SwiftUI
+import UserNotifications
 
 struct SettingsView: View {
     @EnvironmentObject var appState: AppState
+    @Environment(\.scenePhase) var scenePhase
     @State private var testPoemStatus: String?
     @State private var isTestingPoem = false
     @State private var showPauseOptions = false
+    @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
 
     // Use computed binding to sync with appState
     private var settings: Binding<UserSettings> {
@@ -142,24 +145,41 @@ struct SettingsView: View {
                                 .foregroundColor(.poemAccent)
                         }
                         Spacer()
-                        if appState.notificationManager.isAuthorized {
+                        switch notificationStatus {
+                        case .authorized, .provisional, .ephemeral:
                             Text("Enabled")
                                 .foregroundColor(.poemAccentAccessible)
-                        } else {
+                        case .denied:
+                            Button("Open Settings") {
+                                openNotificationSettings()
+                            }
+                            .foregroundColor(.poemAccent)
+                        case .notDetermined:
                             Button("Enable") {
                                 Task {
                                     await appState.notificationManager.requestAuthorization()
+                                    checkNotificationStatus()
                                 }
                             }
                             .foregroundColor(.poemAccent)
+                        @unknown default:
+                            Text("Unknown")
+                                .foregroundColor(.poemSecondary)
                         }
                     }
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel("Notifications \(appState.notificationManager.isAuthorized ? "enabled" : "disabled")")
+                    .accessibilityLabel("Notifications \(notificationStatus == .authorized ? "enabled" : "disabled")")
                 } footer: {
-                    if !appState.notificationManager.isAuthorized {
-                        Text("Notifications are required for poem delivery.")
+                    switch notificationStatus {
+                    case .denied:
+                        Text("Notifications are off. Open Settings to enable poem delivery.")
                             .foregroundColor(.orange)
+                    case .notDetermined:
+                        Text("Enable notifications to receive poems.")
+                    case .authorized, .provisional, .ephemeral:
+                        EmptyView()
+                    @unknown default:
+                        EmptyView()
                     }
                 }
 
@@ -236,6 +256,29 @@ struct SettingsView: View {
                     showPauseOptions = false
                 }
             }
+            .onAppear {
+                checkNotificationStatus()
+            }
+            .onChange(of: scenePhase) { _, newPhase in
+                // Re-check when returning from Settings
+                if newPhase == .active {
+                    checkNotificationStatus()
+                }
+            }
+        }
+    }
+
+    private func checkNotificationStatus() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            DispatchQueue.main.async {
+                notificationStatus = settings.authorizationStatus
+            }
+        }
+    }
+
+    private func openNotificationSettings() {
+        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(settingsURL)
         }
     }
 
