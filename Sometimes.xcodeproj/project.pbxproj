@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		01460E28621548D1B6E903CF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A50E983E6A84B7BB5489CDD /* ContentView.swift */; };
 		1B57935040C24EB88049A1D4 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5413E46F345F78292F3B8 /* OnboardingFlow.swift */; };
-		1C28E6F5B0B64DE4ACF4FB66 /* PoemForTheMomentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7ECF7A6052449BDACB0B385 /* PoemForTheMomentApp.swift */; };
+		1C28E6F5B0B64DE4ACF4FB66 /* SometimesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7ECF7A6052449BDACB0B385 /* SometimesApp.swift */; };
 		25AF1DD7226644BCB187EFB4 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587E745CF9824F06823C00E0 /* UserSettings.swift */; };
 		2BFA3F000D4841D5A978B202 /* ArchiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71D8486CB1142838981AEE9 /* ArchiveView.swift */; };
 		2CF2F51718264C86B39AC52F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF85D2C1C138431DBA739280 /* LaunchScreen.storyboard */; };
@@ -56,7 +56,7 @@
 
 /* Begin PBXFileReference section */
 		09B89B2728494272AB8F8C64 /* TimingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimingEngine.swift; sourceTree = "<group>"; };
-		29EECEE92EF9055F00935305 /* PoemForTheMoment.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PoemForTheMoment.entitlements; sourceTree = "<group>"; };
+		29EECEE92EF9055F00935305 /* Sometimes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sometimes.entitlements; sourceTree = "<group>"; };
 		2D4CE7568924416BBA23BEAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A50E983E6A84B7BB5489CDD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		53AB3AF89FE443608858A76F /* NotificationContent.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationContent.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,9 +78,9 @@
 		B7E92A0DF90E406A9D8613B0 /* PoemNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemNotificationView.swift; sourceTree = "<group>"; };
 		D00C69896BD54280BB587B67 /* poems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = poems.json; sourceTree = "<group>"; };
 		D0DC29D04BCA415199BA39F5 /* SamplePoems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePoems.swift; sourceTree = "<group>"; };
-		D7ECF7A6052449BDACB0B385 /* PoemForTheMomentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemForTheMomentApp.swift; sourceTree = "<group>"; };
+		D7ECF7A6052449BDACB0B385 /* SometimesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SometimesApp.swift; sourceTree = "<group>"; };
 		E3F1A2B4C5D64E7F8A9B0C1D /* PoemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemDetailView.swift; sourceTree = "<group>"; };
-		FBED7DA07F6B46DAAC3BF57F /* PoemForTheMoment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoemForTheMoment.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBED7DA07F6B46DAAC3BF57F /* Sometimes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sometimes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -98,7 +98,7 @@
 		58438BB9444048858A1F901B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FBED7DA07F6B46DAAC3BF57F /* PoemForTheMoment.app */,
+				FBED7DA07F6B46DAAC3BF57F /* Sometimes.app */,
 				53AB3AF89FE443608858A76F /* NotificationContent.appex */,
 			);
 			name = Products;
@@ -118,7 +118,7 @@
 		93EEDFCCFA0E4E03A9AB9B74 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				D7ECF7A6052449BDACB0B385 /* PoemForTheMomentApp.swift */,
+				D7ECF7A6052449BDACB0B385 /* SometimesApp.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -167,7 +167,7 @@
 		D978502BE1014D53A955D9F8 = {
 			isa = PBXGroup;
 			children = (
-				FB66F445BF014FC5A74092C5 /* PoemForTheMoment */,
+				FB66F445BF014FC5A74092C5 /* Sometimes */,
 				A9671E5B51DB4976A6DC65AF /* NotificationContent */,
 				58438BB9444048858A1F901B /* Products */,
 			);
@@ -189,10 +189,10 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
-		FB66F445BF014FC5A74092C5 /* PoemForTheMoment */ = {
+		FB66F445BF014FC5A74092C5 /* Sometimes */ = {
 			isa = PBXGroup;
 			children = (
-				29EECEE92EF9055F00935305 /* PoemForTheMoment.entitlements */,
+				29EECEE92EF9055F00935305 /* Sometimes.entitlements */,
 				93EEDFCCFA0E4E03A9AB9B74 /* App */,
 				FF6345F021B94F1A8095431B /* Design */,
 				2D4CE7568924416BBA23BEAC /* Info.plist */,
@@ -201,7 +201,7 @@
 				778061CEB5144DBAB61106E6 /* Services */,
 				B286FAF549564851ADDC69A7 /* Views */,
 			);
-			path = PoemForTheMoment;
+			path = Sometimes;
 			sourceTree = "<group>";
 		};
 		FF6345F021B94F1A8095431B /* Design */ = {
@@ -215,9 +215,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		112A93F07FC9494E9BD5BA7C /* PoemForTheMoment */ = {
+		112A93F07FC9494E9BD5BA7C /* Sometimes */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 223C556570984404A735B9A8 /* Build configuration list for PBXNativeTarget "PoemForTheMoment" */;
+			buildConfigurationList = 223C556570984404A735B9A8 /* Build configuration list for PBXNativeTarget "Sometimes" */;
 			buildPhases = (
 				8C91EB4860E54F94AA096E9C /* Sources */,
 				2B859316AD2D40F397ACA247 /* Resources */,
@@ -228,9 +228,9 @@
 			dependencies = (
 				851E64D5A949412A896E63EB /* PBXTargetDependency */,
 			);
-			name = PoemForTheMoment;
-			productName = PoemForTheMoment;
-			productReference = FBED7DA07F6B46DAAC3BF57F /* PoemForTheMoment.app */;
+			name = Sometimes;
+			productName = Sometimes;
+			productReference = FBED7DA07F6B46DAAC3BF57F /* Sometimes.app */;
 			productType = "com.apple.product-type.application";
 		};
 		C05033E585A5431EA79CB8B6 /* NotificationContent */ = {
@@ -267,7 +267,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 108E13824715445D8C0ED8C1 /* Build configuration list for PBXProject "PoemForTheMoment" */;
+			buildConfigurationList = 108E13824715445D8C0ED8C1 /* Build configuration list for PBXProject "Sometimes" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -280,7 +280,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				112A93F07FC9494E9BD5BA7C /* PoemForTheMoment */,
+				112A93F07FC9494E9BD5BA7C /* Sometimes */,
 				C05033E585A5431EA79CB8B6 /* NotificationContent */,
 			);
 		};
@@ -321,7 +321,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1C28E6F5B0B64DE4ACF4FB66 /* PoemForTheMomentApp.swift in Sources */,
+				1C28E6F5B0B64DE4ACF4FB66 /* SometimesApp.swift in Sources */,
 				CDB5E9863E694837AA1FE149 /* Typography.swift in Sources */,
 				71200951D2334FA786036204 /* DeliveryContext.swift in Sources */,
 				4B67E184BB464BC98F160530 /* Poem.swift in Sources */,
@@ -362,7 +362,7 @@
 				INFOPLIST_FILE = NotificationContent/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.antigravity.PoemForTheMoment.NotificationContent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sometimes.app.NotificationContent;
 				PRODUCT_NAME = NotificationContent;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -431,7 +431,7 @@
 				INFOPLIST_FILE = NotificationContent/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.antigravity.PoemForTheMoment.NotificationContent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sometimes.app.NotificationContent;
 				PRODUCT_NAME = NotificationContent;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -445,16 +445,16 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = PoemForTheMoment/PoemForTheMoment.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Sometimes/Sometimes.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = PoemForTheMoment/Info.plist;
+				INFOPLIST_FILE = Sometimes/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.antigravity.PoemForTheMoment;
-				PRODUCT_NAME = PoemForTheMoment;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sometimes.app;
+				PRODUCT_NAME = Sometimes;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -520,16 +520,16 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = PoemForTheMoment/PoemForTheMoment.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Sometimes/Sometimes.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = PoemForTheMoment/Info.plist;
+				INFOPLIST_FILE = Sometimes/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.antigravity.PoemForTheMoment;
-				PRODUCT_NAME = PoemForTheMoment;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sometimes.app;
+				PRODUCT_NAME = Sometimes;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -539,7 +539,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		108E13824715445D8C0ED8C1 /* Build configuration list for PBXProject "PoemForTheMoment" */ = {
+		108E13824715445D8C0ED8C1 /* Build configuration list for PBXProject "Sometimes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B77941AAB86345D18CC4940E /* Debug */,
@@ -548,7 +548,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		223C556570984404A735B9A8 /* Build configuration list for PBXNativeTarget "PoemForTheMoment" */ = {
+		223C556570984404A735B9A8 /* Build configuration list for PBXNativeTarget "Sometimes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B3E6D134FE8040B39D6C8B14 /* Debug */,

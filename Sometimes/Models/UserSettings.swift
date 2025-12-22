@@ -21,7 +21,7 @@ struct UserSettings: Codable {
     
     // MARK: - Persistence
     
-    private static let key = "com.poemforthemoment.settings"
+    private static let key = "com.sometimes.app.settings"
     
     static func load() -> UserSettings {
         guard let data = UserDefaults.standard.data(forKey: key),

@@ -6,7 +6,7 @@ import WeatherKit
 import CoreLocation
 import OSLog
 
-private let logger = Logger(subsystem: "com.poemforthemoment", category: "Weather")
+private let logger = Logger(subsystem: "com.sometimes.app", category: "Weather")
 
 actor WeatherService {
     private var cachedWeather: WeatherCondition?

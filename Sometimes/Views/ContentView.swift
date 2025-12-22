@@ -26,7 +26,7 @@ struct MainTabView: View {
         if #available(iOS 26.0, *) {
             // iOS 26+: New Tab struct with Liquid Glass floating tab bar
             TabView(selection: $appState.selectedTab) {
-                Tab("Poems", systemImage: "book.closed", value: 0) {
+                Tab("Archive", systemImage: "book.closed", value: 0) {
                     ArchiveView()
                 }
                 Tab("Settings", systemImage: "gearshape", value: 1) {
@@ -40,7 +40,7 @@ struct MainTabView: View {
             TabView(selection: $appState.selectedTab) {
                 ArchiveView()
                     .tabItem {
-                        Label("Poems", systemImage: "book.closed")
+                        Label("Archive", systemImage: "book.closed")
                     }
                     .tag(0)
 

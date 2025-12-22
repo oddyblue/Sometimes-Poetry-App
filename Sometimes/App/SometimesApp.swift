@@ -1,4 +1,4 @@
-// PoemForTheMomentApp.swift
+// SometimesApp.swift
 // The main entry point for Poem for the Moment
 
 import SwiftUI
@@ -96,7 +96,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 }
 
 @main
-struct PoemForTheMomentApp: App {
+struct SometimesApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var appState = AppState()
     @Environment(\.scenePhase) private var scenePhase

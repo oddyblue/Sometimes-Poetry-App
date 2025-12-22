@@ -4,7 +4,7 @@
 import Foundation
 import OSLog
 
-private let logger = Logger(subsystem: "com.poemforthemoment", category: "Timing")
+private let logger = Logger(subsystem: "com.sometimes.app", category: "Timing")
 
 actor TimingEngine {
     private let poemStore: PoemStore
@@ -16,7 +16,7 @@ actor TimingEngine {
     private var scheduledPoemID: String?
 
     // UserDefaults key for persisting scheduled poem info
-    private let scheduledPoemKey = "com.poemforthemoment.scheduledPoem"
+    private let scheduledPoemKey = "com.sometimes.app.scheduledPoem"
 
     init(poemStore: PoemStore, notificationManager: NotificationManager, settings: UserSettings) {
         self.poemStore = poemStore
@@ -33,7 +33,7 @@ actor TimingEngine {
     // MARK: - Persistence (Static Helper)
 
     private static func loadScheduledPoemInfo() -> (Date?, String?) {
-        let key = "com.poemforthemoment.scheduledPoem"
+        let key = "com.sometimes.app.scheduledPoem"
         guard let data = UserDefaults.standard.data(forKey: key) else {
             return (nil, nil)
         }

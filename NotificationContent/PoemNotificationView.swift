@@ -99,7 +99,7 @@ struct PoemNotificationView: View {
                 }
 
                 // App branding
-                Text("Poem for the Moment")
+                Text("Sometimes")
                     .font(.system(size: 11, weight: .medium))
                     .foregroundColor(accentColor)
                     .tracking(1.2)

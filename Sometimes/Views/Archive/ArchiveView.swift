@@ -40,7 +40,7 @@ struct ArchiveView: View {
                 }
             }
             .background(Color.poemBackground)
-            .navigationTitle("Poems")
+            .navigationTitle("Archive")
             .navigationBarTitleDisplayMode(.large)
             .navigationDestination(for: DeliveredPoem.self) { delivered in
                 PoemDetailView(delivered: delivered)

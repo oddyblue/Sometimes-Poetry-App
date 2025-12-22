@@ -5,7 +5,7 @@ import Foundation
 import UserNotifications
 import OSLog
 
-private let logger = Logger(subsystem: "com.poemforthemoment", category: "Notifications")
+private let logger = Logger(subsystem: "com.sometimes.app", category: "Notifications")
 
 final class NotificationManager: ObservableObject, @unchecked Sendable {
     @Published var isAuthorized = false

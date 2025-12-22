@@ -62,16 +62,14 @@ struct WelcomePage: View {
             Spacer()
 
             VStack(spacing: 32) {
-                Text("Poem for the Moment")
-                    .font(.custom("Georgia", size: 32))
+                Text("Sometimes")
+                    .font(.custom("Georgia", size: 36))
                     .foregroundColor(.poemText)
                     .accessibilityAddTraits(.isHeader)
 
-                Text("Poetry that finds you at the\nright time.")
+                Text("A poem arrives.")
                     .font(.custom("Georgia-Italic", size: 20))
                     .foregroundColor(.poemSecondary)
-                    .multilineTextAlignment(.center)
-                    .lineSpacing(6)
             }
             .accessibilityElement(children: .combine)
 
@@ -95,13 +93,13 @@ struct ConceptPage: View {
             Spacer()
 
             VStack(spacing: 24) {
-                Text("This isn't a daily poem app.")
+                Text("Poetry finds you.")
                     .font(.custom("Georgia", size: 24))
                     .foregroundColor(.poemText)
                     .multilineTextAlignment(.center)
                     .accessibilityAddTraits(.isHeader)
 
-                Text("A few times each week, a poem will\narrive — chosen for this moment.\n\nThe time of day. The weather.\nThe season. Right now.\n\nRead it in the notification.\nOr save it for later.\n\nThat's it.")
+                Text("A few times each week, a poem\narrives — chosen for this moment.\n\nThe weather. The time of day.\nThe season.\n\nRead it in the notification.\nSave it for later.\n\nThat's it.")
                     .font(.custom("Georgia", size: 18))
                     .foregroundColor(.poemSecondary)
                     .multilineTextAlignment(.center)
@@ -302,12 +300,12 @@ struct NotificationPage: View {
             Spacer()
 
             VStack(spacing: 24) {
-                Text("One last thing.")
+                Text("One thing.")
                     .font(.custom("Georgia", size: 24))
                     .foregroundColor(.poemText)
                     .accessibilityAddTraits(.isHeader)
 
-                Text("Poems arrive as notifications.\nWithout them, the magic won't work.")
+                Text("Poems arrive as notifications.\nThe notification is the experience.")
                     .font(.custom("Georgia", size: 18))
                     .foregroundColor(.poemSecondary)
                     .multilineTextAlignment(.center)
@@ -350,7 +348,7 @@ struct DonePage: View {
             Spacer()
 
             VStack(spacing: 24) {
-                Text("You're all set.")
+                Text("You're ready.")
                     .font(.custom("Georgia", size: 24))
                     .foregroundColor(.poemText)
                     .accessibilityAddTraits(.isHeader)

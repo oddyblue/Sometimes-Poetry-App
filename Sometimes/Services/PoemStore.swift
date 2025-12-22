@@ -6,7 +6,7 @@ import Foundation
 import SwiftData
 import OSLog
 
-private let logger = Logger(subsystem: "com.poemforthemoment", category: "PoemStore")
+private let logger = Logger(subsystem: "com.sometimes.app", category: "PoemStore")
 
 @MainActor
 final class PoemStore {
@@ -92,7 +92,7 @@ final class PoemStore {
     // MARK: - Migration
 
     private func migrateFromUserDefaultsIfNeeded() {
-        let key = "com.poemforthemoment.delivered"
+        let key = "com.sometimes.app.delivered"
         guard let data = UserDefaults.standard.data(forKey: key),
               let oldPoems = try? JSONDecoder().decode([DeliveredPoem].self, from: data),
               !oldPoems.isEmpty else {

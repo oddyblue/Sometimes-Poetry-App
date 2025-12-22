@@ -219,7 +219,7 @@ struct SettingsView: View {
                 } header: {
                     Text("About")
                 } footer: {
-                    Text("Poem for the Moment delivers public domain poetry at unexpected, meaningful moments.")
+                    Text("Sometimes delivers poetry at meaningful moments.")
                         .font(.footnote)
                         .foregroundColor(.poemSecondary)
                 }
