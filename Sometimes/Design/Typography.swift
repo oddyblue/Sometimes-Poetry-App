@@ -10,15 +10,15 @@ extension Color {
     /// Warm cream background (light) / Deep charcoal (dark)
     static let poemBackground = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark
-            ? UIColor(hex: "1C1C1E")  // Deep Charcoal
-            : UIColor(hex: "FAFAF8")  // Warm Cream
+            ? UIColor(hex: "161311")  // Deep Charcoal
+            : UIColor(hex: "F2ECE7")  // Warm Cream
     })
 
     /// Off-black text (light) / Cream text (dark)
     static let poemText = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark
-            ? UIColor(hex: "F5F5F0")  // Cream Text
-            : UIColor(hex: "1A1A1A")  // Off-Black
+            ? UIColor(hex: "F2ECE7")  // Cream Text
+            : UIColor(hex: "161311")  // Deep Charcoal
     })
 
     /// Muted sage accent (slightly lighter in dark mode)
@@ -35,24 +35,24 @@ extension Color {
             : UIColor(hex: "5A6B5A")  // Darker for light mode (4.5:1+)
     })
 
-    /// Sophisticated grey (adjusted for dark mode)
+    /// Sophisticated grey (adjusted for dark mode) - WCAG 4.5:1 compliant
     static let poemSecondary = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark
-            ? UIColor(hex: "9A9A9A")  // Lighter Grey
-            : UIColor(hex: "6A6A6A")  // Sophisticated Grey
+            ? UIColor(hex: "A0A0A0")  // Lighter Grey for dark mode
+            : UIColor(hex: "5A5A5A")  // Darker Grey for light mode (4.5:1+)
     })
 
     /// Subtle divider (adjusted for dark mode)
     static let poemDivider = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark
-            ? UIColor(hex: "3A3A3C")  // Dark Divider
-            : UIColor(hex: "E5E5E0")  // Subtle Divider
+            ? UIColor(hex: "2A2622")  // Dark Divider
+            : UIColor(hex: "E5E0DB")  // Subtle Divider
     })
 
-    /// Card background (white in light, slightly lighter charcoal in dark)
+    /// Card background (slightly elevated from main background)
     static let poemCardBackground = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark
-            ? UIColor(hex: "2C2C2E")  // Card Dark
+            ? UIColor(hex: "1E1B19")  // Slightly lighter than bg
             : UIColor(hex: "FFFFFF")  // White
     })
 
@@ -148,7 +148,7 @@ struct ContextHintStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.system(size: 13, weight: .medium, design: .default))
-            .foregroundColor(.poemAccent)
+            .foregroundColor(.poemAccentAccessible)
             .textCase(.lowercase)
             .tracking(0.5)
     }
@@ -200,7 +200,7 @@ struct PoemCard: View {
             Text(poem.text)
                 .poemText()
             
-            Text("— \(poem.poet)")
+            Text(poem.poet)
                 .poetAttribution()
             
             if showDivider {

@@ -131,14 +131,36 @@ actor TimingEngine {
     func checkAndRescheduleIfNeeded() async {
         let pending = await notificationManager.getPendingNotifications()
 
+        // Case 1: No pending notifications at all
         if pending.isEmpty {
-            // No pending notifications, schedule one
+            // Check if we had a scheduled notification that should have fired
+            if let scheduledDate = nextScheduledDate, scheduledDate < Date() {
+                // Notification was scheduled but has passed - it must have fired
+                logger.info("Detected notification that fired while app was closed")
+                
+                // Mark that poem as delivered
+                if let poemID = scheduledPoemID {
+                    let weather = await weatherService.getWeather()
+                    let context = DeliveryContext(weather: weather)
+                    
+                    if let poem = await poemStore.findPoem(byID: poemID) {
+                        await poemStore.markAsDelivered(poem, context: context)
+                    }
+                }
+                
+                // Clear state
+                clearScheduledPoemInfo()
+            }
+            
+            // Schedule next poem
             await scheduleNextPoem()
         } else if let scheduledDate = nextScheduledDate, scheduledDate < Date() {
-            // Scheduled date has passed but notification didn't fire
+            // Case 2: Scheduled date has passed but notification didn't fire
             // This can happen if the app was force-quit
+            logger.warning("Scheduled notification time passed but notification still pending - rescheduling")
             await scheduleNextPoem()
         }
+        // Case 3: Notification is pending and scheduled for future - all good, do nothing
     }
 
     func updateSettings(_ newSettings: UserSettings) {
@@ -223,12 +245,10 @@ actor TimingEngine {
 
         await notificationManager.deliverPoemNow(poem, hint: context.hint)
         await poemStore.markAsDelivered(poem, context: context)
-
-        // Schedule next poem after a delay to avoid canceling the test notification
-        Task {
-            try? await Task.sleep(nanoseconds: 3_000_000_000) // 3 seconds
-            await self.scheduleNextPoem()
-        }
+        
+        // NOTE: Do NOT call scheduleNextPoem() here!
+        // It runs cancelAllPendingNotifications() which would cancel delayed test notifications.
+        // Next poem scheduling is handled by checkAndRescheduleIfNeeded() when user reopens app.
     }
 }
 

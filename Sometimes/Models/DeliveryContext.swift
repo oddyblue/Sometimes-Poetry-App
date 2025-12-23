@@ -1,7 +1,42 @@
 // DeliveryContext.swift
-// Captures the ambient context at poem delivery time
+// Captures the ambient context at poem delivery time and save time
 
 import Foundation
+
+// MARK: - Save Context (captured when user favorites a poem)
+
+/// Context captured at the moment a user saves/favorites a poem.
+/// This data is NOT used in scoring — reserved for future features
+/// (year-end anthology, exportable collections, optional taste analysis).
+struct SaveContext: Codable, Equatable {
+    let weather: String?        // "rainy", "clear", etc.
+    let timeOfDay: String?      // "morning", "evening", etc.
+    let season: String?         // "winter", "spring", etc.
+    let dayOfWeek: String?      // "Monday", "Tuesday", etc.
+    let temperature: Double?    // actual temp if available (future)
+    let location: String?       // city name if permission granted (future)
+    let savedAt: Date
+
+    /// Creates a SaveContext from current conditions
+    static func current(weather: WeatherCondition? = nil) -> SaveContext {
+        let now = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE"
+        let dayOfWeek = formatter.string(from: now)
+
+        return SaveContext(
+            weather: weather?.rawValue,
+            timeOfDay: TimeOfDay.current().rawValue,
+            season: Season.current().rawValue,
+            dayOfWeek: dayOfWeek,
+            temperature: nil,  // Future: integrate with WeatherService
+            location: nil,     // Future: requires location permission
+            savedAt: now
+        )
+    }
+}
+
+// MARK: - Delivery Context (captured when poem is delivered)
 
 struct DeliveryContext: Codable {
     let timeOfDay: TimeOfDay
@@ -70,5 +105,47 @@ struct DeliveryContext: Codable {
         case .autumnEquinox: return "for the changing season"
         case .valentines: return "for love"
         }
+    }
+
+    // MARK: - Share Context String
+
+    /// Generates a natural "This Found Me" context string for sharing
+    /// Example: "on a rainy Wednesday morning in December"
+    var shareContextString: String {
+        let formatter = DateFormatter()
+
+        // Get weekday name
+        formatter.dateFormat = "EEEE"
+        let weekday = formatter.string(from: timestamp)
+
+        // Get month name
+        formatter.dateFormat = "MMMM"
+        let month = formatter.string(from: timestamp)
+
+        // Build the natural phrase
+        var components: [String] = []
+
+        // Weather (if notable)
+        if let weather = weather {
+            switch weather {
+            case .rainy: components.append("rainy")
+            case .snowy: components.append("snowy")
+            case .stormy: components.append("stormy")
+            case .foggy: components.append("foggy")
+            case .cloudy: components.append("cloudy")
+            case .clear: components.append("clear")
+            case .any: break
+            }
+        }
+
+        // Day of week
+        components.append(weekday)
+
+        // Time of day
+        components.append(timeOfDay.rawValue)
+
+        // Combine: "on a rainy Wednesday morning in December"
+        let description = components.joined(separator: " ")
+        return "on a \(description) in \(month)"
     }
 }

@@ -53,7 +53,10 @@ struct PoemDetailView: View {
             }
             .padding(.horizontal, 32)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.poemBackground)
+        .toolbarBackground(Color.poemBackground, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .adaptiveToolbarStyle()
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -155,6 +158,7 @@ struct ShareOptionsView: View {
 
                     Toggle("Dark Background", isOn: $useDarkMode)
                         .font(.subheadline)
+                        .foregroundColor(.poemText)
                 }
                 .padding(.horizontal)
 
@@ -174,8 +178,12 @@ struct ShareOptionsView: View {
                 .accessibilityHint("Double tap to share this poem as an image")
             }
             .padding(.vertical)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.poemBackground)
             .navigationTitle("Share")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(Color.poemBackground, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
@@ -194,6 +202,7 @@ struct ShareOptionsView: View {
                 }
             }
         }
+        .presentationBackground(Color.poemBackground)
     }
 
     @MainActor
@@ -230,7 +239,7 @@ struct ShareImageGenerator {
     @MainActor
     static func generateImage(for delivered: DeliveredPoem, aspectRatio: ShareAspectRatio = .standard, darkMode: Bool = false) -> UIImage {
         let size = aspectRatio.size
-        let view = ShareImageView(delivered: delivered, size: size, darkMode: darkMode)
+        let view = ShareImageView(delivered: delivered, size: size, aspectRatio: aspectRatio, darkMode: darkMode)
 
         let renderer = ImageRenderer(content: view)
         renderer.scale = 3.0
@@ -242,6 +251,7 @@ struct ShareImageGenerator {
 private struct ShareImageView: View {
     let delivered: DeliveredPoem
     let size: CGSize
+    let aspectRatio: ShareAspectRatio
     let darkMode: Bool
 
     private var backgroundColor: Color {
@@ -264,6 +274,40 @@ private struct ShareImageView: View {
         darkMode ? Color(red: 0.23, green: 0.23, blue: 0.24) : Color(red: 0.9, green: 0.9, blue: 0.88)
     }
 
+    // Smart truncation for long poems based on card format
+    private var displayText: String {
+        let lines = delivered.poem.text.components(separatedBy: "\n")
+        let maxLines: Int = {
+            switch aspectRatio {
+            case .standard: return 20
+            case .square: return 14
+            case .story: return 28
+            }
+        }()
+
+        guard lines.count > maxLines else { return delivered.poem.text }
+        return lines.prefix(maxLines - 1).joined(separator: "\n") + "\n..."
+    }
+
+    // Dynamic font size based on content length
+    private var poemFontSize: CGFloat {
+        let charCount = displayText.count
+        switch aspectRatio {
+        case .square:
+            if charCount > 600 { return 18 }
+            if charCount > 400 { return 20 }
+            return 22
+        case .standard:
+            if charCount > 800 { return 18 }
+            if charCount > 500 { return 20 }
+            return 22
+        case .story:
+            if charCount > 1000 { return 18 }
+            if charCount > 700 { return 20 }
+            return 22
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
@@ -280,10 +324,10 @@ private struct ShareImageView: View {
                     .font(.custom("Georgia-Italic", size: 24))
                     .foregroundColor(secondaryColor)
 
-                Text(delivered.poem.text)
-                    .font(.custom("Georgia", size: 22))
+                Text(displayText)
+                    .font(.custom("Georgia", size: poemFontSize))
                     .foregroundColor(textColor)
-                    .lineSpacing(12)
+                    .lineSpacing(10)
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: size.width * 0.8)
@@ -291,20 +335,30 @@ private struct ShareImageView: View {
 
             Spacer()
 
-            VStack(spacing: 16) {
+            VStack(spacing: 12) {
                 Rectangle()
                     .fill(dividerColor)
                     .frame(width: 60, height: 1)
 
                 Text(contextString)
-                    .font(.custom("Georgia-Italic", size: 16))
-                    .foregroundColor(secondaryColor)
+                    .font(.custom("Georgia-Italic", size: 14))
+                    .foregroundColor(secondaryColor.opacity(0.8))
+                    .padding(.top, 4)
 
-                Text("Poem for the Moment")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(accentColor)
-                    .tracking(1.5)
-                    .textCase(.uppercase)
+                // App branding
+                HStack(spacing: 8) {
+                    Text("Sometimes")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(accentColor)
+
+                    Text("·")
+                        .font(.system(size: 14))
+                        .foregroundColor(secondaryColor)
+
+                    Text("A poem arrives")
+                        .font(.custom("Georgia-Italic", size: 14))
+                        .foregroundColor(secondaryColor)
+                }
             }
             .padding(.bottom, 48)
         }
@@ -313,16 +367,8 @@ private struct ShareImageView: View {
     }
 
     private var contextString: String {
-        let weekday = delivered.deliveredAt.formatted(Date.FormatStyle().weekday(.wide))
-        var context = "Arrived on a \(weekday.lowercased())"
-
-        if let weather = delivered.context.weather {
-            context += " \(weather.rawValue)"
-        }
-
-        context += " \(delivered.context.timeOfDay.rawValue)"
-
-        return context
+        // "This found me" + natural context phrase
+        "This found me \(delivered.context.shareContextString)"
     }
 }
 

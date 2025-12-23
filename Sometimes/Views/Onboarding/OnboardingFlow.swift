@@ -8,8 +8,8 @@ struct OnboardingFlow: View {
     @EnvironmentObject var appState: AppState
     @State private var currentPage = 0
     @State private var activeHoursStart = 8
-    @State private var activeHoursEnd = 12
-    @State private var poemsPerWeek = 3
+    @State private var activeHoursEnd = 20
+    @State private var poemsPerWeek = 7  // Daily by default
 
     private let totalPages = 6
 
@@ -99,33 +99,46 @@ struct WelcomePage: View {
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
+            Spacer()
 
-            VStack(spacing: 20) {
+            VStack(spacing: 16) {
                 Text("Sometimes")
-                    .font(.custom("Georgia", size: 42))
+                    .font(.custom("Georgia", size: 48))
                     .fontWeight(.regular)
                     .foregroundColor(.poemText)
                     .opacity(appeared ? 1 : 0)
-                    .offset(y: appeared ? 0 : 10)
+                    .offset(y: appeared ? 0 : 20)
 
-                Text("poetry, timed to your life")
-                    .font(.custom("Georgia-Italic", size: 18))
+                Text("a poem arrives")
+                    .font(.custom("Georgia-Italic", size: 20))
                     .foregroundColor(.poemSecondary)
                     .opacity(appeared ? 1 : 0)
-                    .offset(y: appeared ? 0 : 10)
+                    .offset(y: appeared ? 0 : 15)
+                    .animation(.easeOut(duration: 0.8).delay(0.4), value: appeared)
             }
             .accessibilityElement(children: .combine)
 
             Spacer()
             Spacer()
+            Spacer()
 
-            OnboardingButton(title: "Begin", action: onContinue)
-                .opacity(appeared ? 1 : 0)
-                .padding(.bottom, 80)
+            Button(action: onContinue) {
+                Text("Begin")
+                    .font(.custom("Georgia", size: 17))
+                    .foregroundColor(.poemText)
+                    .frame(width: 120, height: 48)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(Color.poemText.opacity(0.3), lineWidth: 1)
+                    )
+            }
+            .opacity(appeared ? 1 : 0)
+            .animation(.easeOut(duration: 0.6).delay(0.6), value: appeared)
+            .padding(.bottom, 80)
         }
         .padding(.horizontal, 40)
         .onAppear {
-            withAnimation(.easeOut(duration: 0.8).delay(0.2)) {
+            withAnimation(.easeOut(duration: 0.8)) {
                 appeared = true
             }
         }
@@ -136,52 +149,65 @@ struct WelcomePage: View {
 
 struct MagicPage: View {
     let onContinue: () -> Void
+    @State private var appeared = false
 
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
+            Spacer()
 
-            VStack(spacing: 32) {
-                Text("Chosen for this moment")
-                    .font(.custom("Georgia", size: 26))
+            VStack(spacing: 40) {
+                Text("Chosen for\nthis moment")
+                    .font(.custom("Georgia", size: 32))
                     .foregroundColor(.poemText)
                     .multilineTextAlignment(.center)
+                    .lineSpacing(4)
+                    .opacity(appeared ? 1 : 0)
+                    .offset(y: appeared ? 0 : 15)
 
-                VStack(spacing: 24) {
-                    Text("Each poem arrives at a time\nselected just for you.")
+                VStack(spacing: 20) {
+                    Text("Each poem arrives when\nthe moment feels right.")
                         .font(.custom("Georgia", size: 17))
                         .foregroundColor(.poemSecondary)
                         .multilineTextAlignment(.center)
                         .lineSpacing(6)
+                        .opacity(appeared ? 1 : 0)
+                        .animation(.easeOut(duration: 0.6).delay(0.2), value: appeared)
 
-                    VStack(spacing: 6) {
-                        Text("Morning light. Evening quiet.")
-                            .font(.custom("Georgia-Italic", size: 16))
-                            .foregroundColor(.poemSecondary.opacity(0.8))
-                        Text("The first rain of autumn.")
-                            .font(.custom("Georgia-Italic", size: 16))
-                            .foregroundColor(.poemSecondary.opacity(0.8))
-                        Text("A cold Tuesday afternoon.")
-                            .font(.custom("Georgia-Italic", size: 16))
-                            .foregroundColor(.poemSecondary.opacity(0.8))
-                    }
-                    .multilineTextAlignment(.center)
-
-                    Text("We consider the hour,\nthe weather, the season.\nThen we wait for the right moment.")
-                        .font(.custom("Georgia", size: 17))
-                        .foregroundColor(.poemSecondary)
+                    Text("The hour. The weather.\nThe season of the year.")
+                        .font(.custom("Georgia-Italic", size: 16))
+                        .foregroundColor(.poemSecondary.opacity(0.7))
                         .multilineTextAlignment(.center)
-                        .lineSpacing(6)
+                        .lineSpacing(4)
+                        .opacity(appeared ? 1 : 0)
+                        .animation(.easeOut(duration: 0.6).delay(0.4), value: appeared)
                 }
             }
 
             Spacer()
             Spacer()
+            Spacer()
 
-            OnboardingButton(title: "Continue", action: onContinue)
-                .padding(.bottom, 80)
+            Button(action: onContinue) {
+                Text("Continue")
+                    .font(.custom("Georgia", size: 17))
+                    .foregroundColor(.poemText)
+                    .frame(width: 140, height: 48)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(Color.poemText.opacity(0.3), lineWidth: 1)
+                    )
+            }
+            .opacity(appeared ? 1 : 0)
+            .animation(.easeOut(duration: 0.5).delay(0.5), value: appeared)
+            .padding(.bottom, 80)
         }
         .padding(.horizontal, 40)
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.6)) {
+                appeared = true
+            }
+        }
     }
 }
 
@@ -191,31 +217,34 @@ struct TimingPage: View {
     @Binding var startHour: Int
     @Binding var endHour: Int
     let onContinue: () -> Void
+    @State private var appeared = false
 
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
 
-            VStack(spacing: 24) {
-                Text("Your window")
-                    .font(.custom("Georgia", size: 26))
+            VStack(spacing: 20) {
+                Text("Your hours")
+                    .font(.custom("Georgia", size: 32))
                     .foregroundColor(.poemText)
+                    .opacity(appeared ? 1 : 0)
+                    .offset(y: appeared ? 0 : 15)
 
-                Text("Poems arrive within these hours.\nWe choose the perfect moment.")
-                    .font(.custom("Georgia", size: 16))
+                Text("When should poetry find you?")
+                    .font(.custom("Georgia-Italic", size: 17))
                     .foregroundColor(.poemSecondary)
-                    .multilineTextAlignment(.center)
-                    .lineSpacing(6)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(.easeOut(duration: 0.6).delay(0.2), value: appeared)
             }
 
             Spacer()
 
             // Time selection
-            HStack(spacing: 20) {
+            HStack(spacing: 24) {
                 TimeSelector(
                     label: "From",
                     hour: $startHour,
-                    range: 5..<22,
+                    hours: Array(0..<24),
                     onSelect: { hour in
                         if endHour <= hour {
                             endHour = min(hour + 4, 24)
@@ -223,34 +252,52 @@ struct TimingPage: View {
                     }
                 )
 
-                Text("to")
-                    .font(.custom("Georgia-Italic", size: 16))
-                    .foregroundColor(.poemSecondary)
+                Text("—")
+                    .font(.custom("Georgia", size: 20))
+                    .foregroundColor(.poemSecondary.opacity(0.5))
                     .padding(.top, 28)
 
                 TimeSelector(
                     label: "Until",
                     hour: $endHour,
-                    range: (startHour + 1)..<25,
+                    hours: Array(max(1, startHour + 1)...24),
                     onSelect: { _ in }
                 )
             }
             .padding(.horizontal, 20)
+            .opacity(appeared ? 1 : 0)
+            .animation(.easeOut(duration: 0.5).delay(0.3), value: appeared)
 
             Spacer()
             Spacer()
 
-            OnboardingButton(title: "Continue", action: onContinue)
-                .padding(.bottom, 80)
+            Button(action: onContinue) {
+                Text("Continue")
+                    .font(.custom("Georgia", size: 17))
+                    .foregroundColor(.poemText)
+                    .frame(width: 140, height: 48)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(Color.poemText.opacity(0.3), lineWidth: 1)
+                    )
+            }
+            .opacity(appeared ? 1 : 0)
+            .animation(.easeOut(duration: 0.5).delay(0.4), value: appeared)
+            .padding(.bottom, 80)
         }
         .padding(.horizontal, 40)
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.6)) {
+                appeared = true
+            }
+        }
     }
 }
 
 struct TimeSelector: View {
     let label: String
     @Binding var hour: Int
-    let range: Range<Int>
+    let hours: [Int]
     let onSelect: (Int) -> Void
 
     var body: some View {
@@ -262,7 +309,7 @@ struct TimeSelector: View {
                 .tracking(0.5)
 
             Menu {
-                ForEach(Array(range), id: \.self) { h in
+                ForEach(hours, id: \.self) { h in
                     Button(formatHour(h)) {
                         hour = h
                         onSelect(h)
@@ -298,9 +345,10 @@ struct TimeSelector: View {
 struct RhythmPage: View {
     @Binding var frequency: Int
     let onContinue: () -> Void
+    @State private var appeared = false
 
     private let options: [(value: Int, title: String, subtitle: String)] = [
-        (3, "A few times a week", "Gentle, unhurried"),
+        (3, "A few times", "Gentle, unhurried"),
         (5, "Most days", "A steady presence"),
         (7, "Every day", "A daily ritual")
     ]
@@ -309,19 +357,23 @@ struct RhythmPage: View {
         VStack(spacing: 0) {
             Spacer()
 
-            VStack(spacing: 24) {
+            VStack(spacing: 20) {
                 Text("Your rhythm")
-                    .font(.custom("Georgia", size: 26))
+                    .font(.custom("Georgia", size: 32))
                     .foregroundColor(.poemText)
+                    .opacity(appeared ? 1 : 0)
+                    .offset(y: appeared ? 0 : 15)
 
                 Text("How often should poetry find you?")
-                    .font(.custom("Georgia", size: 16))
+                    .font(.custom("Georgia-Italic", size: 17))
                     .foregroundColor(.poemSecondary)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(.easeOut(duration: 0.6).delay(0.2), value: appeared)
             }
 
             Spacer()
 
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 ForEach(options, id: \.value) { option in
                     FrequencyOption(
                         title: option.title,
@@ -331,19 +383,39 @@ struct RhythmPage: View {
                     )
                 }
             }
+            .opacity(appeared ? 1 : 0)
+            .animation(.easeOut(duration: 0.5).delay(0.3), value: appeared)
 
-            Text("You can change this anytime.")
-                .font(.system(size: 13))
-                .foregroundColor(.poemSecondary.opacity(0.7))
-                .padding(.top, 16)
+            Text("You can always change this later.")
+                .font(.custom("Georgia-Italic", size: 13))
+                .foregroundColor(.poemSecondary.opacity(0.6))
+                .padding(.top, 20)
+                .opacity(appeared ? 1 : 0)
+                .animation(.easeOut(duration: 0.5).delay(0.4), value: appeared)
 
             Spacer()
             Spacer()
 
-            OnboardingButton(title: "Continue", action: onContinue)
-                .padding(.bottom, 80)
+            Button(action: onContinue) {
+                Text("Continue")
+                    .font(.custom("Georgia", size: 17))
+                    .foregroundColor(.poemText)
+                    .frame(width: 140, height: 48)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(Color.poemText.opacity(0.3), lineWidth: 1)
+                    )
+            }
+            .opacity(appeared ? 1 : 0)
+            .animation(.easeOut(duration: 0.5).delay(0.5), value: appeared)
+            .padding(.bottom, 80)
         }
         .padding(.horizontal, 40)
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.6)) {
+                appeared = true
+            }
+        }
     }
 }
 
@@ -393,6 +465,7 @@ struct NotificationPermissionPage: View {
     @Environment(\.scenePhase) var scenePhase
     @State private var permissionState: PermissionState = .unknown
     @State private var isRequesting = false
+    @State private var appeared = false
 
     enum PermissionState {
         case unknown
@@ -406,26 +479,24 @@ struct NotificationPermissionPage: View {
             Spacer()
 
             VStack(spacing: 32) {
-                Text("One permission")
-                    .font(.custom("Georgia", size: 26))
+                Text("One thing")
+                    .font(.custom("Georgia", size: 32))
                     .foregroundColor(.poemText)
+                    .opacity(appeared ? 1 : 0)
+                    .offset(y: appeared ? 0 : 15)
 
-                VStack(spacing: 20) {
-                    Text("Poems arrive as notifications.\nThis is the experience itself.")
+                VStack(spacing: 16) {
+                    Text("Poems arrive as notifications.")
                         .font(.custom("Georgia", size: 17))
                         .foregroundColor(.poemSecondary)
                         .multilineTextAlignment(.center)
-                        .lineSpacing(6)
 
-                    VStack(spacing: 4) {
-                        Text("Long-press to read more.")
-                            .font(.custom("Georgia-Italic", size: 15))
-                            .foregroundColor(.poemSecondary.opacity(0.8))
-                        Text("Save what moves you.")
-                            .font(.custom("Georgia-Italic", size: 15))
-                            .foregroundColor(.poemSecondary.opacity(0.8))
-                    }
+                    Text("This is the experience itself.")
+                        .font(.custom("Georgia-Italic", size: 16))
+                        .foregroundColor(.poemSecondary.opacity(0.7))
                 }
+                .opacity(appeared ? 1 : 0)
+                .animation(.easeOut(duration: 0.6).delay(0.2), value: appeared)
             }
 
             Spacer()
@@ -434,50 +505,83 @@ struct NotificationPermissionPage: View {
             VStack(spacing: 16) {
                 switch permissionState {
                 case .unknown, .notDetermined:
-                    OnboardingButton(
-                        title: isRequesting ? "..." : "Allow Notifications",
-                        action: requestPermission
-                    )
+                    Button(action: requestPermission) {
+                        Text(isRequesting ? "..." : "Allow Notifications")
+                            .font(.custom("Georgia", size: 17))
+                            .foregroundColor(.poemText)
+                            .frame(width: 200, height: 48)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(Color.poemText.opacity(0.3), lineWidth: 1)
+                            )
+                    }
                     .disabled(isRequesting)
 
                 case .denied:
-                    VStack(spacing: 12) {
-                        Text("Notifications are turned off.")
-                            .font(.system(size: 14))
-                            .foregroundColor(.poemSecondary)
+                    VStack(spacing: 24) {
+                        VStack(spacing: 12) {
+                            Text("Notifications are off")
+                                .font(.custom("Georgia", size: 18))
+                                .foregroundColor(.poemText)
 
-                        OnboardingButton(
-                            title: "Open Settings",
-                            action: openSettings
-                        )
+                            Text("Without them, poems\ncan't reach you.")
+                                .font(.custom("Georgia", size: 15))
+                                .foregroundColor(.poemSecondary)
+                                .multilineTextAlignment(.center)
+                        }
 
-                        Button("Skip for now") {
+                        Button(action: openSettings) {
+                            Text("Open Settings")
+                                .font(.custom("Georgia", size: 17))
+                                .foregroundColor(.poemText)
+                                .frame(width: 160, height: 48)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 24)
+                                        .stroke(Color.poemText.opacity(0.3), lineWidth: 1)
+                                )
+                        }
+
+                        Button("Continue anyway") {
                             onContinue()
                         }
-                        .font(.system(size: 14))
-                        .foregroundColor(.poemSecondary)
-                        .padding(.top, 8)
+                        .font(.custom("Georgia-Italic", size: 14))
+                        .foregroundColor(.poemSecondary.opacity(0.6))
                     }
 
                 case .authorized:
-                    VStack(spacing: 12) {
+                    VStack(spacing: 16) {
                         HStack(spacing: 8) {
-                            Image(systemName: "checkmark.circle.fill")
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 14, weight: .medium))
                                 .foregroundColor(.poemAccent)
-                            Text("Notifications enabled")
-                                .font(.system(size: 15, weight: .medium))
-                                .foregroundColor(.poemText)
+                            Text("Enabled")
+                                .font(.custom("Georgia", size: 15))
+                                .foregroundColor(.poemSecondary)
                         }
 
-                        OnboardingButton(title: "Continue", action: onContinue)
+                        Button(action: onContinue) {
+                            Text("Continue")
+                                .font(.custom("Georgia", size: 17))
+                                .foregroundColor(.poemText)
+                                .frame(width: 140, height: 48)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 24)
+                                        .stroke(Color.poemText.opacity(0.3), lineWidth: 1)
+                                )
+                        }
                     }
                 }
             }
+            .opacity(appeared ? 1 : 0)
+            .animation(.easeOut(duration: 0.5).delay(0.3), value: appeared)
             .padding(.bottom, 80)
         }
         .padding(.horizontal, 40)
         .onAppear {
             checkPermissionState()
+            withAnimation(.easeOut(duration: 0.6)) {
+                appeared = true
+            }
         }
         .onChange(of: scenePhase) { _, newPhase in
             // Re-check when returning from Settings
@@ -547,37 +651,49 @@ struct ReadyPage: View {
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
+            Spacer()
 
             VStack(spacing: 32) {
                 Text("Now we wait")
-                    .font(.custom("Georgia", size: 26))
+                    .font(.custom("Georgia", size: 32))
                     .foregroundColor(.poemText)
                     .opacity(appeared ? 1 : 0)
+                    .offset(y: appeared ? 0 : 15)
 
-                VStack(spacing: 16) {
+                VStack(spacing: 12) {
                     Text("Your first poem will arrive soon.")
                         .font(.custom("Georgia", size: 17))
                         .foregroundColor(.poemSecondary)
 
-                    Text("Until then, there is nothing to do.\nThe archive will fill itself.")
-                        .font(.custom("Georgia", size: 17))
-                        .foregroundColor(.poemSecondary.opacity(0.8))
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(6)
+                    Text("Until then, there is nothing to do.")
+                        .font(.custom("Georgia-Italic", size: 16))
+                        .foregroundColor(.poemSecondary.opacity(0.7))
                 }
                 .opacity(appeared ? 1 : 0)
+                .animation(.easeOut(duration: 0.6).delay(0.3), value: appeared)
             }
 
             Spacer()
             Spacer()
+            Spacer()
 
-            OnboardingButton(title: "Close", action: onComplete)
-                .opacity(appeared ? 1 : 0)
-                .padding(.bottom, 80)
+            Button(action: onComplete) {
+                Text("Begin")
+                    .font(.custom("Georgia", size: 17))
+                    .foregroundColor(.poemText)
+                    .frame(width: 120, height: 48)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(Color.poemText.opacity(0.3), lineWidth: 1)
+                    )
+            }
+            .opacity(appeared ? 1 : 0)
+            .animation(.easeOut(duration: 0.5).delay(0.5), value: appeared)
+            .padding(.bottom, 80)
         }
         .padding(.horizontal, 40)
         .onAppear {
-            withAnimation(.easeOut(duration: 0.6).delay(0.1)) {
+            withAnimation(.easeOut(duration: 0.6)) {
                 appeared = true
             }
         }

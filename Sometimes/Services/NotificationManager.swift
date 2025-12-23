@@ -172,4 +172,5 @@ extension Notification.Name {
     static let savePoemToFavorites = Notification.Name("savePoemToFavorites")
     static let poemDelivered = Notification.Name("poemDelivered")
     static let navigateToPoem = Notification.Name("navigateToPoem")
+    static let favoritesChanged = Notification.Name("favoritesChanged")
 }

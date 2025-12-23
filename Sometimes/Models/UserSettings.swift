@@ -7,7 +7,7 @@ struct UserSettings: Codable {
     // Delivery preferences
     var activeHoursStart: Int = 8   // 8 AM default
     var activeHoursEnd: Int = 12    // 12 PM default (morning window)
-    var poemsPerWeek: Int = 3       // 1-7 (daily)
+    var poemsPerWeek: Int = 7       // Daily by default
     
     // App state
     var hasCompletedOnboarding: Bool = false

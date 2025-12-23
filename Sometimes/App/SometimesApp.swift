@@ -1,5 +1,5 @@
 // SometimesApp.swift
-// The main entry point for Poem for the Moment
+// The main entry point for Sometimes
 
 import SwiftUI
 import UserNotifications
@@ -14,7 +14,60 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     ) -> Bool {
         // Set notification delegate immediately on launch
         UNUserNotificationCenter.current().delegate = self
+
+        // Configure global appearance for consistent styling
+        configureAppearance()
+
         return true
+    }
+
+    private func configureAppearance() {
+        // Navigation bar appearance
+        let navAppearance = UINavigationBarAppearance()
+        navAppearance.configureWithDefaultBackground()
+        navAppearance.backgroundColor = UIColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark
+                ? UIColor(hex: "161311")
+                : UIColor(hex: "F2ECE7")
+        }
+        navAppearance.shadowColor = .clear
+
+        // Title text attributes
+        navAppearance.titleTextAttributes = [
+            .foregroundColor: UIColor { traitCollection in
+                traitCollection.userInterfaceStyle == .dark
+                    ? UIColor(hex: "F2ECE7")
+                    : UIColor(hex: "161311")
+            }
+        ]
+        navAppearance.largeTitleTextAttributes = [
+            .foregroundColor: UIColor { traitCollection in
+                traitCollection.userInterfaceStyle == .dark
+                    ? UIColor(hex: "F2ECE7")
+                    : UIColor(hex: "161311")
+            }
+        ]
+
+        UINavigationBar.appearance().standardAppearance = navAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navAppearance
+        UINavigationBar.appearance().compactAppearance = navAppearance
+
+        // Tab bar appearance
+        let tabAppearance = UITabBarAppearance()
+        tabAppearance.configureWithDefaultBackground()
+        tabAppearance.backgroundColor = UIColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark
+                ? UIColor(hex: "161311")
+                : UIColor(hex: "F2ECE7")
+        }
+        tabAppearance.shadowColor = .clear
+
+        UITabBar.appearance().standardAppearance = tabAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabAppearance
+
+        // Table/List view appearance
+        UITableView.appearance().backgroundColor = .clear
+        UITableViewCell.appearance().backgroundColor = .clear
     }
 
     // Show notifications even when app is in foreground

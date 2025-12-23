@@ -39,13 +39,15 @@ struct ArchiveView: View {
                     poemList
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.poemBackground)
             .navigationTitle("Archive")
             .navigationBarTitleDisplayMode(.large)
             .navigationDestination(for: DeliveredPoem.self) { delivered in
                 PoemDetailView(delivered: delivered)
             }
-            .adaptiveToolbarStyle()
+            .toolbarBackground(Color.poemBackground, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 if !poems.isEmpty {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -71,6 +73,10 @@ struct ArchiveView: View {
             // Refresh when a new poem is delivered
             loadPoems()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .favoritesChanged)) { _ in
+            // Refresh when favorites change (from detail view or notification action)
+            loadPoems()
+        }
         .onChange(of: appState.pendingDeepLinkPoemID) { _, poemID in
             guard let poemID = poemID else { return }
             // Refresh poems first to ensure the new poem is loaded
@@ -93,7 +99,7 @@ struct ArchiveView: View {
                             .padding(.horizontal, 24)
                             .padding(.top, 16)
 
-                        ForEach(group.poems) { delivered in
+                        ForEach(group.poems, id: \.id) { delivered in
                             NavigationLink(value: delivered) {
                                 ArchiveCard(delivered: delivered)
                             }

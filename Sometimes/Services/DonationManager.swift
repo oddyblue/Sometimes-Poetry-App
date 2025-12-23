@@ -20,9 +20,9 @@ final class DonationManager: ObservableObject {
     // Product IDs for tip jar donations
     // These must match the product IDs in App Store Connect
     private let productIDs = [
-        "com.sometimes.app.tip.small",   // $2.99
-        "com.sometimes.app.tip.medium",  // $4.99
-        "com.sometimes.app.tip.large"    // $9.99
+        "com.sometimes.app.support.small",   // $2.99
+        "com.sometimes.app.support.medium",  // $4.99
+        "com.sometimes.app.support.large"    // $9.99
     ]
 
     init() {
@@ -37,15 +37,21 @@ final class DonationManager: ObservableObject {
         isLoading = true
         purchaseError = nil
 
+        logger.info("Attempting to load products with IDs: \(self.productIDs)")
+
         do {
             let loadedProducts = try await Product.products(for: productIDs)
 
             // Sort by price (low to high)
             products = loadedProducts.sorted { $0.price < $1.price }
 
-            logger.info("Loaded \(self.products.count) donation products")
+            if products.isEmpty {
+                logger.warning("No products returned from StoreKit - check Configuration.storekit is linked in scheme")
+            } else {
+                logger.info("Loaded \(self.products.count) donation products: \(self.products.map { $0.id })")
+            }
         } catch {
-            logger.error("Failed to load products: \(error.localizedDescription)")
+            logger.error("Failed to load products: \(error.localizedDescription), error: \(String(describing: error))")
             purchaseError = "Could not load donation options. Please try again later."
         }
 

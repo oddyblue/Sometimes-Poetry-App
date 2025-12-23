@@ -12,7 +12,7 @@ Sometimes respects your privacy completely:
 - No analytics
 - Everything stays on your device
 
-[Read our Privacy Policy →](https://oddyblue.github.io/Sometimes-Poetry/)
+[Read our Privacy Policy →](https://oddyblue.github.io/Sometimes-Poetry-App/)
 
 ## Features
 

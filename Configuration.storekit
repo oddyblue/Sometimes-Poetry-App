@@ -11,12 +11,12 @@
       "localizations" : [
         {
           "description" : "Support Sometimes",
-          "displayName" : "Small Coffee",
+          "displayName" : "Coffee",
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.sometimes.app.tip.small",
-      "referenceName" : "Small Coffee",
+      "productID" : "com.sometimes.app.support.small",
+      "referenceName" : "Coffee",
       "type" : "Consumable"
     },
     {
@@ -30,7 +30,7 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.sometimes.app.tip.medium",
+      "productID" : "com.sometimes.app.support.medium",
       "referenceName" : "Nice Lunch",
       "type" : "Consumable"
     },
@@ -45,7 +45,7 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.sometimes.app.tip.large",
+      "productID" : "com.sometimes.app.support.large",
       "referenceName" : "Generous Support",
       "type" : "Consumable"
     }

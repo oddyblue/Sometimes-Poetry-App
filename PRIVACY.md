@@ -127,7 +127,9 @@ You have the right to:
 
 If you have questions about this privacy policy or your data:
 
-**GitHub**: [github.com/oddyblue/Sometimes-Poetry-App](https://github.com/oddyblue/Sometimes-Poetry-App)
+**Email**: [your email address]
+
+**GitHub**: [your GitHub repository URL if public]
 
 ## Legal Compliance
 

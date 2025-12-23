@@ -14,6 +14,7 @@ struct SettingsView: View {
     @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
     @StateObject private var donationManager = DonationManager()
     @State private var showDonationSuccess = false
+    @State private var showTipSheet = false
 
     // Use computed binding to sync with appState
     private var settings: Binding<UserSettings> {
@@ -230,40 +231,19 @@ struct SettingsView: View {
 
                 // MARK: - Support Section
                 Section {
-                    if donationManager.isLoading {
-                        HStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }
-                    } else if donationManager.products.isEmpty {
-                        Button {
-                            Task {
-                                await donationManager.loadProducts()
-                            }
-                        } label: {
-                            Label("Retry Loading", systemImage: "arrow.clockwise")
+                    Button {
+                        showTipSheet = true
+                    } label: {
+                        Label {
+                            Text("Leave a Tip")
+                        } icon: {
+                            Image(systemName: "heart")
                                 .foregroundColor(.poemAccent)
                         }
-                    } else {
-                        ForEach(donationManager.products, id: \.id) { product in
-                            DonationProductRow(
-                                product: product,
-                                donationManager: donationManager,
-                                showSuccess: $showDonationSuccess
-                            )
-                        }
                     }
-
-                    if let error = donationManager.purchaseError {
-                        Text(error)
-                            .font(.caption)
-                            .foregroundColor(.orange)
-                    }
-                } header: {
-                    Text("Support Sometimes")
+                    .foregroundColor(.primary)
                 } footer: {
-                    Text("Sometimes is free with no ads. If you enjoy receiving poetry, consider leaving a tip to support continued development.")
+                    Text("Sometimes is free with no ads.")
                 }
 
                 // MARK: - About Section
@@ -277,17 +257,51 @@ struct SettingsView: View {
                     }
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel("Version 1.0.0")
+
+                    Link(destination: URL(string: "https://sometimes.app/privacy")!) {
+                        HStack {
+                            Label("Privacy Policy", systemImage: "hand.raised")
+                                .foregroundColor(.primary)
+                            Spacer()
+                            Image(systemName: "arrow.up.right")
+                                .font(.footnote)
+                                .foregroundColor(.poemSecondary)
+                        }
+                    }
+
+                    Link(destination: URL(string: "https://sometimes.app/terms")!) {
+                        HStack {
+                            Label("Terms of Service", systemImage: "doc.text")
+                                .foregroundColor(.primary)
+                            Spacer()
+                            Image(systemName: "arrow.up.right")
+                                .font(.footnote)
+                                .foregroundColor(.poemSecondary)
+                        }
+                    }
                 } header: {
                     Text("About")
                 } footer: {
-                    Text("Sometimes delivers poetry at meaningful moments.")
-                        .font(.footnote)
-                        .foregroundColor(.poemSecondary)
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Sometimes delivers poetry at meaningful moments.")
+
+                        // Philosophy statement - no tracking, no analytics
+                        Text("We don't know if you read the poems.\nWe just send them.\nNo tracking. No analytics. No optimization.\nSometimes, a poem arrives.")
+                            .font(.custom("Georgia-Italic", size: 13))
+                            .foregroundColor(.poemSecondary.opacity(0.8))
+                            .lineSpacing(4)
+                    }
+                    .font(.footnote)
+                    .foregroundColor(.poemSecondary)
+                    .padding(.top, 8)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(Color.poemBackground)
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.large)
-            .adaptiveToolbarStyle()
+            .toolbarBackground(Color.poemBackground, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .sheet(isPresented: $showPauseOptions) {
                 PauseDurationSheet { days in
                     var updated = appState.settings
@@ -296,6 +310,12 @@ struct SettingsView: View {
                     appState.notificationManager.cancelAllPendingNotifications()
                     showPauseOptions = false
                 }
+            }
+            .sheet(isPresented: $showTipSheet) {
+                TipJarSheet(
+                    donationManager: donationManager,
+                    showSuccess: $showDonationSuccess
+                )
             }
             .alert("Thank You!", isPresented: $showDonationSuccess) {
                 Button("OK", role: .cancel) { }
@@ -398,7 +418,7 @@ struct PauseDurationSheet: View {
                             HStack {
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(option.label)
-                                        .foregroundColor(.primary)
+                                        .foregroundColor(.poemText)
                                     Text(option.description)
                                         .font(.caption)
                                         .foregroundColor(.poemSecondary)
@@ -416,8 +436,12 @@ struct PauseDurationSheet: View {
                     Text("You can resume anytime from Settings.")
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(Color.poemBackground)
             .navigationTitle("Pause Duration")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(Color.poemBackground, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
@@ -425,6 +449,7 @@ struct PauseDurationSheet: View {
             }
         }
         .presentationDetents([.medium])
+        .presentationBackground(Color.poemBackground)
     }
 }
 
@@ -440,7 +465,7 @@ struct ActiveHoursSettingView: View {
         Form {
             Section {
                 Picker("From", selection: $startHour) {
-                    ForEach(5..<22, id: \.self) { hour in
+                    ForEach(0..<24, id: \.self) { hour in
                         Text(formatHour(hour)).tag(hour)
                     }
                 }
@@ -458,9 +483,12 @@ struct ActiveHoursSettingView: View {
                 Text("Poems will only arrive during these hours. We recommend a window of at least 8 hours for the best experience.")
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(Color.poemBackground)
         .navigationTitle("Active Hours")
         .navigationBarTitleDisplayMode(.inline)
-        .adaptiveToolbarStyle()
+        .toolbarBackground(Color.poemBackground, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .onChange(of: startHour) { _, _ in onSave() }
         .onChange(of: endHour) { _, _ in onSave() }
     }
@@ -506,7 +534,7 @@ struct FrequencySettingView: View {
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(preset.label)
-                                    .foregroundColor(.primary)
+                                    .foregroundColor(.poemText)
                                 Text(preset.description)
                                     .font(.caption)
                                     .foregroundColor(.poemSecondary)
@@ -536,7 +564,7 @@ struct FrequencySettingView: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Custom")
-                                .foregroundColor(.primary)
+                                .foregroundColor(.poemText)
                             Text("Set your own frequency")
                                 .font(.caption)
                                 .foregroundColor(.poemSecondary)
@@ -555,9 +583,12 @@ struct FrequencySettingView: View {
                 .accessibilityHint("Double tap to set a custom number of poems per week")
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(Color.poemBackground)
         .navigationTitle("Frequency")
         .navigationBarTitleDisplayMode(.inline)
-        .adaptiveToolbarStyle()
+        .toolbarBackground(Color.poemBackground, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .sheet(isPresented: $showCustomPicker) {
             CustomFrequencySheet(frequency: $frequency) {
                 onSave()
@@ -635,9 +666,12 @@ struct CustomFrequencySheet: View {
                 .padding(.horizontal, 24)
                 .padding(.bottom, 40)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.poemBackground)
             .navigationTitle("Custom Frequency")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(Color.poemBackground, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
@@ -648,33 +682,128 @@ struct CustomFrequencySheet: View {
             tempFrequency = frequency
         }
         .presentationDetents([.medium])
+        .presentationBackground(Color.poemBackground)
     }
 }
 
-// MARK: - Donation Product Row
+// MARK: - Tip Jar Sheet
 
-struct DonationProductRow: View {
-    let product: Product
+struct TipJarSheet: View {
     @ObservedObject var donationManager: DonationManager
     @Binding var showSuccess: Bool
-    @State private var isPurchasing = false
+    @Environment(\.dismiss) var dismiss
+    @State private var purchasingProductID: String?
 
     var body: some View {
-        Button {
-            purchase()
-        } label: {
-            HStack(spacing: 12) {
-                Image(systemName: product.donationIcon)
-                    .font(.title2)
-                    .foregroundColor(.poemAccent)
-                    .frame(width: 32)
+        NavigationStack {
+            VStack(spacing: 32) {
+                Spacer()
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(product.donationDisplayName)
-                        .foregroundColor(.primary)
-                        .font(.body)
-                    Text(product.donationDescription)
+                // Header
+                VStack(spacing: 12) {
+                    Image(systemName: "heart.fill")
+                        .font(.system(size: 40, weight: .light))
+                        .foregroundColor(.poemAccent)
+
+                    Text("Support Sometimes")
+                        .font(.custom("Georgia", size: 24))
+                        .foregroundColor(.poemText)
+
+                    Text("Your tip helps keep this app\nfree and ad-free for everyone.")
+                        .font(.custom("Georgia", size: 15))
+                        .foregroundColor(.poemSecondary)
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(4)
+                }
+
+                Spacer()
+
+                // Tip options
+                if donationManager.isLoading {
+                    ProgressView()
+                        .padding()
+                } else if donationManager.products.isEmpty {
+                    Button {
+                        Task { await donationManager.loadProducts() }
+                    } label: {
+                        Text("Load tip options")
+                            .foregroundColor(.poemAccent)
+                    }
+                } else {
+                    VStack(spacing: 12) {
+                        ForEach(donationManager.products, id: \.id) { product in
+                            TipOptionRow(
+                                product: product,
+                                isPurchasing: purchasingProductID == product.id,
+                                onPurchase: { purchaseProduct(product) }
+                            )
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                }
+
+                if let error = donationManager.purchaseError {
+                    Text(error)
                         .font(.caption)
+                        .foregroundColor(.orange)
+                        .padding(.horizontal)
+                }
+
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.poemBackground)
+            .navigationTitle("Tip Jar")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(Color.poemBackground, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close") { dismiss() }
+                }
+            }
+        }
+        .presentationDetents([.medium])
+        .presentationBackground(Color.poemBackground)
+        .task {
+            if donationManager.products.isEmpty {
+                await donationManager.loadProducts()
+            }
+        }
+    }
+
+    private func purchaseProduct(_ product: Product) {
+        purchasingProductID = product.id
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.impactOccurred()
+
+        Task {
+            let success = await donationManager.purchase(product)
+            await MainActor.run {
+                purchasingProductID = nil
+                if success {
+                    showSuccess = true
+                    dismiss()
+                }
+            }
+        }
+    }
+}
+
+struct TipOptionRow: View {
+    let product: Product
+    let isPurchasing: Bool
+    let onPurchase: () -> Void
+
+    var body: some View {
+        Button(action: onPurchase) {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(product.donationDisplayName)
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.poemText)
+                    Text(product.donationDescription)
+                        .font(.system(size: 13))
                         .foregroundColor(.poemSecondary)
                 }
 
@@ -685,31 +814,21 @@ struct DonationProductRow: View {
                         .scaleEffect(0.8)
                 } else {
                     Text(product.displayPrice)
-                        .font(.system(.body, design: .rounded))
-                        .fontWeight(.semibold)
+                        .font(.system(size: 16, weight: .semibold, design: .rounded))
                         .foregroundColor(.poemAccent)
                 }
             }
-            .padding(.vertical, 4)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+            .background(Color.poemCardBackground)
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.poemDivider, lineWidth: 1)
+            )
         }
         .disabled(isPurchasing)
-        .accessibilityLabel("\(product.donationDisplayName), \(product.displayPrice)")
-        .accessibilityHint(product.donationDescription)
-    }
-
-    private func purchase() {
-        isPurchasing = true
-
-        Task {
-            let success = await donationManager.purchase(product)
-
-            await MainActor.run {
-                isPurchasing = false
-                if success {
-                    showSuccess = true
-                }
-            }
-        }
+        .buttonStyle(.plain)
     }
 }
 

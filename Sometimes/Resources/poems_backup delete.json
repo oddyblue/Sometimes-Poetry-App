@@ -1,0 +1,82 @@
+[
+  {
+    "id": "frost-stopping-by-woods",
+    "title": "Stopping by Woods on a Snowy Evening",
+    "poet": "Robert Frost",
+    "text": "Whose woods these are I think I know.\nHis house is in the village though;\nHe will not see me stopping here\nTo watch his woods fill up with snow.\n\nMy little horse must think it queer\nTo stop without a farmhouse near\nBetween the woods and frozen lake\nThe darkest evening of the year.\n\nHe gives his harness bells a shake\nTo ask if there is some mistake.\nThe only other sound's the sweep\nOf easy wind and downy flake.\n\nThe woods are lovely, dark and deep,\nBut I have promises to keep,\nAnd miles to go before I sleep,\nAnd miles to go before I sleep.",
+    "year": 1923,
+    "publicDomain": true,
+    "context": {
+      "timeOfDay": ["evening", "night"],
+      "seasons": ["winter"],
+      "weather": ["snowy", "cloudy", "any"],
+      "mood": ["contemplative", "peaceful", "solitary"],
+      "specialDates": ["winter_solstice"]
+    },
+    "meta": {
+      "length": "medium",
+      "lines": 16,
+      "difficulty": "accessible"
+    }
+  },
+  {
+    "id": "hardy-darkling-thrush",
+    "title": "The Darkling Thrush",
+    "poet": "Thomas Hardy",
+    "text": "I leant upon a coppice gate\nWhen Frost was spectre-grey,\nAnd Winter's dregs made desolate\nThe weakening eye of day.\nThe tangled bine-stems scored the sky\nLike strings of broken lyres,\nAnd all mankind that haunted nigh\nHad sought their household fires.\n\nThe land's sharp features seemed to be\nThe Century's corpse outleant,\nHis crypt the cloudy canopy,\nThe wind his death-lament.\nThe ancient pulse of germ and birth\nWas shrunken hard and dry,\nAnd every spirit upon earth\nSeemed fervourless as I.\n\nAt once a voice arose among\nThe bleak twigs overhead\n   In a full-hearted evensong\nOf joy illimited;\nAn aged thrush, frail, gaunt, and small,\nIn blast-beruffled plume,\nHad chosen thus to fling his soul\nUpon the growing gloom.\n\nSo little cause for carolings\nOf such ecstatic sound\nWas written on terrestrial things\nAfar or around;\nThat I could think there trembled through\nHis happy good-night air\nSome blessed Hope, whereof he knew\nAnd I was unaware.",
+    "year": 1900,
+    "publicDomain": true,
+    "context": {
+      "timeOfDay": ["afternoon", "evening"],
+      "seasons": ["winter"],
+      "weather": ["cloudy", "foggy", "any"],
+      "mood": ["melancholic", "hopeful"],
+      "specialDates": ["new_year"]
+    },
+    "meta": {
+      "length": "long",
+      "lines": 32,
+      "difficulty": "medium"
+    }
+  },
+  {
+    "id": "dickinson-hope",
+    "title": "\"Hope\" is the thing with feathers",
+    "poet": "Emily Dickinson",
+    "text": "\"Hope\" is the thing with feathers -\nThat perches in the soul -\nAnd sings the tune without the words -\nAnd never stops - at all -\n\nAnd sweetest - in the Gale - is heard -\nAnd sore must be the storm -\nThat could abash the little Bird -\nThat kept so many warm -\n\nI've heard it in the chillest land -\nAnd on the strangest Sea -\nYet - never - in Extremity,\nIt asked a crumb - of me.",
+    "year": 1891,
+    "publicDomain": true,
+    "context": {
+      "timeOfDay": null,
+      "seasons": null,
+      "weather": ["stormy", "rainy", "any"],
+      "mood": ["hopeful", "resilient"],
+      "specialDates": null
+    },
+    "meta": {
+      "length": "short",
+      "lines": 12,
+      "difficulty": "accessible"
+    }
+  },
+  {
+    "id": "wordsworth-daffodils",
+    "title": "I Wandered Lonely as a Cloud",
+    "poet": "William Wordsworth",
+    "text": "I wandered lonely as a cloud\nThat floats on high o'er vales and hills,\nWhen all at once I saw a crowd,\nA host, of golden daffodils;\nBeside the lake, beneath the trees,\nFluttering and dancing in the breeze.\n\nContinuous as the stars that shine\nAnd twinkle on the milky way,\nThey stretched in never-ending line\nAlong the margin of a bay:\nTen thousand saw I at a glance,\nTossing their heads in sprightly dance.\n\nThe waves beside them danced; but they\nOut-did the sparkling waves in glee:\nA poet could not but be gay,\nIn such a jocund company:\nI gazed—and gazed—but little thought\nWhat wealth the show to me had brought:\n\nFor oft, when on my couch I lie\nIn vacant or in pensive mood,\nThey flash upon that inward eye\nWhich is the bliss of solitude;\nAnd then my heart with pleasure fills,\nAnd dances with the daffodils.",
+    "year": 1807,
+    "publicDomain": true,
+    "context": {
+      "timeOfDay": ["morning", "afternoon"],
+      "seasons": ["spring"],
+      "weather": ["clear", "cloudy", "any"],
+      "mood": ["cheerful", "peaceful"],
+      "specialDates": ["spring_equinox"]
+    },
+    "meta": {
+      "length": "medium",
+      "lines": 24,
+      "difficulty": "accessible"
+    }
+  }
+]
