@@ -1,23 +1,32 @@
 {
     "images": [
         {
-            "filename": "icon-background.png",
+            "filename": "AppIcon-Light.png",
             "idiom": "universal",
-            "layer": "background",
             "platform": "ios",
             "size": "1024x1024"
         },
         {
-            "filename": "icon-middle.png",
+            "appearances": [
+                {
+                    "appearance": "luminosity",
+                    "value": "dark"
+                }
+            ],
+            "filename": "AppIcon-Dark.png",
             "idiom": "universal",
-            "layer": "middle",
             "platform": "ios",
             "size": "1024x1024"
         },
         {
-            "filename": "icon-foreground.png",
+            "appearances": [
+                {
+                    "appearance": "luminosity",
+                    "value": "tinted"
+                }
+            ],
+            "filename": "AppIcon-Tinted.png",
             "idiom": "universal",
-            "layer": "foreground",
             "platform": "ios",
             "size": "1024x1024"
         }
@@ -25,9 +34,5 @@
     "info": {
         "author": "xcode",
         "version": 1
-    },
-    "properties": {
-        "layered-images": true,
-        "pre-rendered": true
     }
 }

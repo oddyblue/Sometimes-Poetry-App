@@ -3,6 +3,7 @@
 
 import SwiftUI
 import UserNotifications
+import StoreKit
 
 struct SettingsView: View {
     @EnvironmentObject var appState: AppState
@@ -11,6 +12,8 @@ struct SettingsView: View {
     @State private var isTestingPoem = false
     @State private var showPauseOptions = false
     @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
+    @StateObject private var donationManager = DonationManager()
+    @State private var showDonationSuccess = false
 
     // Use computed binding to sync with appState
     private var settings: Binding<UserSettings> {
@@ -225,6 +228,44 @@ struct SettingsView: View {
                     Text("Send a test poem to verify notifications work.")
                 }
 
+                // MARK: - Support Section
+                Section {
+                    if donationManager.isLoading {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                    } else if donationManager.products.isEmpty {
+                        Button {
+                            Task {
+                                await donationManager.loadProducts()
+                            }
+                        } label: {
+                            Label("Retry Loading", systemImage: "arrow.clockwise")
+                                .foregroundColor(.poemAccent)
+                        }
+                    } else {
+                        ForEach(donationManager.products, id: \.id) { product in
+                            DonationProductRow(
+                                product: product,
+                                donationManager: donationManager,
+                                showSuccess: $showDonationSuccess
+                            )
+                        }
+                    }
+
+                    if let error = donationManager.purchaseError {
+                        Text(error)
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                } header: {
+                    Text("Support Sometimes")
+                } footer: {
+                    Text("Sometimes is free with no ads. If you enjoy receiving poetry, consider leaving a tip to support continued development.")
+                }
+
                 // MARK: - About Section
                 Section {
                     HStack {
@@ -255,6 +296,11 @@ struct SettingsView: View {
                     appState.notificationManager.cancelAllPendingNotifications()
                     showPauseOptions = false
                 }
+            }
+            .alert("Thank You!", isPresented: $showDonationSuccess) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Your support means everything. Thank you for helping keep Sometimes alive.")
             }
             .onAppear {
                 checkNotificationStatus()
@@ -309,7 +355,6 @@ struct SettingsView: View {
             if delay > 0 {
                 await MainActor.run {
                     testPoemStatus = "Sending in \(delay) seconds..."
-                    isTestingPoem = false
                 }
                 try? await Task.sleep(nanoseconds: UInt64(delay) * 1_000_000_000)
             }
@@ -318,6 +363,7 @@ struct SettingsView: View {
 
             await MainActor.run {
                 testPoemStatus = "Poem sent! Check your notifications."
+                isTestingPoem = false
             }
 
             try? await Task.sleep(nanoseconds: 5_000_000_000)
@@ -479,7 +525,7 @@ struct FrequencySettingView: View {
             } header: {
                 Text("Presets")
             } footer: {
-                Text("Choose how often poems arrive. Less can be more — each poem feels special.")
+                Text("Choose how often poems arrive.")
             }
 
             // Custom Section
@@ -602,6 +648,68 @@ struct CustomFrequencySheet: View {
             tempFrequency = frequency
         }
         .presentationDetents([.medium])
+    }
+}
+
+// MARK: - Donation Product Row
+
+struct DonationProductRow: View {
+    let product: Product
+    @ObservedObject var donationManager: DonationManager
+    @Binding var showSuccess: Bool
+    @State private var isPurchasing = false
+
+    var body: some View {
+        Button {
+            purchase()
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: product.donationIcon)
+                    .font(.title2)
+                    .foregroundColor(.poemAccent)
+                    .frame(width: 32)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(product.donationDisplayName)
+                        .foregroundColor(.primary)
+                        .font(.body)
+                    Text(product.donationDescription)
+                        .font(.caption)
+                        .foregroundColor(.poemSecondary)
+                }
+
+                Spacer()
+
+                if isPurchasing {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                } else {
+                    Text(product.displayPrice)
+                        .font(.system(.body, design: .rounded))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.poemAccent)
+                }
+            }
+            .padding(.vertical, 4)
+        }
+        .disabled(isPurchasing)
+        .accessibilityLabel("\(product.donationDisplayName), \(product.displayPrice)")
+        .accessibilityHint(product.donationDescription)
+    }
+
+    private func purchase() {
+        isPurchasing = true
+
+        Task {
+            let success = await donationManager.purchase(product)
+
+            await MainActor.run {
+                isPurchasing = false
+                if success {
+                    showSuccess = true
+                }
+            }
+        }
     }
 }
 
